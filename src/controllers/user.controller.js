@@ -90,7 +90,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-        return res.status(404).json(new ApiResponse(404, null, "User not found"));
+        return res.status(404).json(new ApiResponse(404, null, "User not found !"));
     }
 
     // Check if OTP is correct
