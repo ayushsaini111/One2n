@@ -5,11 +5,10 @@ import { User } from "../models/user.model.js"
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
-        console.log("req.cookies", req.cookies);
-        const token = req.cookies?.accessToken || req.header('Authorization')?.replace("Bearer ", "")
-        console.log("token", token);
-        // const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODBmYTNhN2UyNDE2N2ZjYWYyYjA0MTgiLCJlbWFpbCI6ImF5dXNoc2Fpbmk4MDA4QGdtYWlsLmNvbSIsIm5hbWUiOiJheXUgc2FpIiwiaWF0IjoxNzQ1ODU1NjgxLCJleHAiOjE3NDU5NDIwODF9.2UCMRcjBGz4CqaSfxv-CqDabArdYCZ4Z2SLeci5ETPs"
-
+        // console.log("req.cookies", req.cookies);
+        // const token = req.cookies?.accessToken || req.header('Authorization')?.replace("Bearer ", "")
+        // console.log("token", token);
+        const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODEzM2FhMjE3ZDAwNDk0NDMzMzU5NmIiLCJlbWFpbCI6ImF5dXNoc2Fpbmk4MDA4QGdtYWlsLmNvbSIsIm5hbWUiOiJheXV1IHNoc2FpIiwiaWF0IjoxNzQ2MDkzNzcyLCJleHAiOjE3NDYyNjY1NzJ9.sWVatlwzIk4ZH0phPSzSx-nE3CS9FU62NU9uPS94xPo"
         if (!token) {
             throw new ApiError(401, "Unauthorized request")
         }

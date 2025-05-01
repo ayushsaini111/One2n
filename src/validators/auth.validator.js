@@ -23,13 +23,10 @@ export const loginSchema = z.object({
       .min(6, "Password must be at least 6 characters long"), 
   });
 
-// Zod schema for sending OTP (email is required)
-export const sendOtpSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }).min(1, { message: "Email is required" }),
-  });
-  
+
   // Zod schema for verifying OTP (both email and OTP are required)
-  export const verifyOtpSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }).min(1, { message: "Email is required" }),
-    otp: z.string().length(6, { message: "OTP must be 6 digits" }), // Adjust OTP length as needed
-  });
+  export const verifyCodeSchema = z.object({
+    code: z.string().min(6, "Code must be 6 digits"),
+    email: z.string().email("Invalid email format"),
+});
+

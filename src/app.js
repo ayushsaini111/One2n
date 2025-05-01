@@ -25,9 +25,7 @@ app.use("/api/v2/auth", authRoutes);
 import userRoutes from "./routes/user.routes.js";
 app.use("/api/v2/users", userRoutes);
 
-import linkedinRoutes from "./routes/linkedin.routes.js";
-app.use("/api/v2/auth", linkedinRoutes);
-
-
+import userpost from "./routes/post.routes.js";
+app.use("/api/v2/post", userpost);
 
 export {app};

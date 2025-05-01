@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from "../models/user.model.js"; // ESM style ✅
+import { generateUniqueUsername } from "../controllers/user.controller.js";
 
 passport.use(
   new GoogleStrategy(
@@ -14,7 +15,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const { givenName, familyName } = profile.name;
-        const username = `${givenName}${familyName}`;
+        const username = generateUniqueUsername(givenName, familyName);
 
         console.log("Google profile:", profile);
 
