@@ -488,7 +488,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   }
 
   if (incomingRefreshToken !== user?.refreshToken) {
-    throw new ApiError(401, "Refresh token is expired or already used");
+    throw new ApiError(401, "Refresh token iiiis expired or already used");
   }
 
   const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
