@@ -15,7 +15,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const { givenName, familyName } = profile.name;
-        const username = generateUniqueUsername(givenName, familyName);
+        const username = await generateUniqueUsername(givenName, familyName);
 
         console.log("Google profile:", profile);
 

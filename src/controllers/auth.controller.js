@@ -4,18 +4,19 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import transporter from "../config/nodemailer.js";
 import axios from "axios";
 import {User} from "../models/user.model.js";
+import { generateAndSendToken } from "../utils/authTokens.js";
 // import transporter from "../config/nodemailer.js";
 
 export const sendAuthToken=asyncHandler(async (req, res) => {
   console.log("uuuuuuuuuu",req.user);
     const googleUser =req.user;
 
-    const accessToken =  await googleUser.generateAccessToken();
-    const refreshToken =  await googleUser.generateRefreshToken();
-
+    // const accessToken =  await googleUser.generateAccessToken();
+    // const refreshToken =  await googleUser.generateRefreshToken();
+    const response   = await generateAndSendToken(googleUser, res, "Google login successful")
      // Save tokens to user document in the database
   // googleUser.accessToken = accessToken;
-  googleUser.refreshToken = refreshToken;
+  // googleUser.refreshToken = refreshToken;
   await googleUser.save();  // Save updated user document
 
     const user={
@@ -29,17 +30,20 @@ export const sendAuthToken=asyncHandler(async (req, res) => {
   };
     res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(
-        200,
-        {
-            user,
-            accessToken,
-            refreshToken
-        },
-        "Google login successfully"
-    ));
+    .json(response)
+    // .cookie("accessToken", accessToken, options)
+    // .cookie("refreshToken", refreshToken, options)
+    
+
+    // .json(new ApiResponse(
+    //     200,
+    //     {
+    //         user,
+    //         accessToken,
+    //         refreshToken
+    //     },
+    //     "Google login successfully"
+    // ));
     try {
       await transporter.sendMail({
           from: 'your-email@example.com',

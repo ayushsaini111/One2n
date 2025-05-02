@@ -8,6 +8,7 @@ import { sendOTPEmail,generateOTP } from "../controllers/auth.controller.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { tempSignupUsers,tempLoginUsers } from "../utils/tempUsers.js";
+import { generateAndSendToken } from "../utils/authTokens.js";
 
 const generateUniqueUsername = async (firstName, lastName) => {
     let username = `${firstName}${lastName}`;
@@ -42,6 +43,7 @@ const sendSignupCodeController = asyncHandler(async (req, res) => {
         const verificationHash = await bcrypt.hash(verificationCode, 10);
         const codeExpiry = Date.now() + 10 * 60 * 1000;
 
+        
         tempSignupUsers.set(email, {
             firstName,
             lastName,
@@ -100,14 +102,17 @@ const verifySignupCodeAndCreateUser = asyncHandler(async (req, res) => {
 
     tempSignupUsers.delete(email); // clear after use
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(newUser._id);
+    // const { accessToken, refreshToken } = await generateAccessAndRefreshToken(newUser._id);
+    const response = await generateAndSendToken(newUser, res, "Registration successful");
+
     const options = { httpOnly: true, secure: true, sameSite: "None" };
 
     return res
         .status(201)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
-        .json(new ApiResponse(201, { user: newUser, accessToken, refreshToken }, "User registered successfully"));
+        .json(response)
+//         .cookie("accessToken", accessToken, options)
+//         .cookie("refreshToken", refreshToken, options)
+//         .json(new ApiResponse(201, { user: newUser, accessToken, refreshToken }, "User registered successfully"));
 });
 
 const sendLoginCodeController = asyncHandler(async (req, res) => {
@@ -190,10 +195,11 @@ const verifyLoginCodeAndLoginUser = asyncHandler(async (req, res) => {
     }
 
     // Generate JWT tokens (access and refresh)
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+    // const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+    const response = await generateAndSendToken(user, res, "Login successful");
 
     // Optionally, save refreshToken in the user's document (if needed for session management)
-    user.refreshToken = refreshToken;
+    // user.refreshToken = refreshToken;
     await user.save();
 
     const options = { httpOnly: true, secure: true, sameSite: "None" };
@@ -201,9 +207,10 @@ const verifyLoginCodeAndLoginUser = asyncHandler(async (req, res) => {
     // Send response with cookies
     return res
         .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
-        .json(new ApiResponse(200, { user, accessToken, refreshToken }, "Login successful"));
+        .json(response)
+        // .cookie("accessToken", accessToken, options)
+        // .cookie("refreshToken", refreshToken, options)
+        // .json(new ApiResponse(200, { user, accessToken, refreshToken }, "Login successful"));
 });
 
 

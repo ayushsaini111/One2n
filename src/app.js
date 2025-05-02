@@ -28,4 +28,14 @@ app.use("/api/v2/users", userRoutes);
 import userpost from "./routes/post.routes.js";
 app.use("/api/v2/post", userpost);
 
+import facebookRoutes from "./routes/facebook.routes.js";
+app.use("/api/v2/auth", facebookRoutes);
+
+import linkedinRoutes from "./routes/linkedin.routes.js";
+app.use("/api/v2/auth", linkedinRoutes);
+
+import twitterRoutes from "./routes/twitter.routes.js";     
+app.use("/api/v2/auth", twitterRoutes);
+
+
 export {app};
